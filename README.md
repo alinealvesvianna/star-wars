@@ -17,6 +17,5 @@ Linhas de comando úteis no desenvolvimento e lançamento do site
 > Para _build_ no ambiente de **desenvolvimento**: `npm start`
 
 2. Rodar _dev_ server:
-```npm start``` ou ```npm run dev```
-
+```npm start``` 
 > Ao salvar alterações o projeto realizar um live reload. Fique de atento aos logs no console, caso ocorram erros os mesmo aparecem lá.  
