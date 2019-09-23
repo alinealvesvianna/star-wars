@@ -1,13 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { fetchPeople, fetchStarships } from './actions'
+import { fetchPeople, fetchStarships } from './actions';
+import { ContainerFlex } from './components/ContainerFlex'; 
+import { Card, CardStarship } from './components/Card';
+import { Title, List, ItemList, MainTitle } from './components/Text';
+import { Button, ButtonSeemore  } from './components/Button';
+import { Logo } from './components/Logo';
+import { func, array } from 'prop-types';
+import logo from './Star_Wars_Logo.png';
 import './App.css';
-
 
 class App extends Component {
 
   state = {
-    inputValue: '',
     page: 1,
   }
 
@@ -45,8 +50,7 @@ class App extends Component {
     const starshipsQueryString = starships.map(item => {
       const queryString = item.match(/starships.*/);
       fetchStarships(queryString[0], name)
-    })
- 
+    }) 
   }
 
   render() {
@@ -55,34 +59,90 @@ class App extends Component {
       startships
     } = this.props;
 
-    const { inputValue } = this.state;
-
+    const { page } = this.state;
 
     return (
-      <div className="App" style={{ paddingTop: '10px' }}>
-      <p>{process.env.REACT_APP_BASE_URL}</p>
-        <button onClick={this.handleSeeMore}>
-          see more
-        </button>
-        {people.map(item => 
-          <div>
-            {item.name}
-            {item.gender}
-            {item.starships && item.starships.length ? (
-              <button onClick={() => {this.handleStarships(item.starships, item.name)}}>clique aqui para ver as starships</button>
-            ) : null}
+      <Fragment>
+        <Logo src={logo} />
+        <MainTitle>Characters</MainTitle>
+        <ContainerFlex flexWrap main row justifyContent="space-between">
+          {people.map(item => 
+            <Card key={item.name}>
+              <Title>
+                {item.name}
+              </Title>
+              <List>
+                <ItemList>
+                  <strong>height: </strong>{item.height}
+                </ItemList>
+                <ItemList>
+                  <strong>mass:</strong> {item.mass}
+                </ItemList>
+                <ItemList>
+                  <strong>hair color:</strong> {item.hair_color}
+                </ItemList>
+                <ItemList>
+                  <strong>skin color:</strong> {item.skin_color}
+                </ItemList>
+                <ItemList>
+                  <strong>eye color:</strong> {item.eye_color}
+                </ItemList>
+                <ItemList>
+                  <strong>birth year:</strong> {item.birth_year}
+                </ItemList>
+                <ItemList>
+                  <strong>gender:</strong> {item.gender}
+                </ItemList>
+              </List>
+              {
+                item.starships && item.starships.length ? (
+                  <Button 
+                    onClick={() => {this.handleStarships(item.starships, item.name)}}
+                  >
+                    See Starships
+                  </Button>
+                ) : 
+                null
+              }
 
-            {startships && startships.map(starship => {
-              return starship.namePerson === item.name && (
-                <div>
-                  {starship.namePerson}
-                  {starship.manufacturer}
-                </div>
-              )
-            })}
-          </div>  
-        )}
-      </div>
+              {
+                startships && startships.map(starship => {
+                  return starship.namePerson === item.name && (
+                    <CardStarship>
+                      <Title>
+                        {starship.name}
+                      </Title>
+                      <List>
+                        <ItemList> 
+                          <strong>model:</strong> {starship.model}
+                        </ItemList>
+                        <ItemList>  
+                          <strong>manufacturer:</strong> {starship.manufacturer}
+                        </ItemList>
+                        <ItemList>  
+                          <strong>crew:</strong> {starship.crew}
+                        </ItemList>
+                        <ItemList>  
+                        <strong>passengers:</strong> {starship.passengers}
+                        </ItemList>
+                      </List>
+                    </CardStarship>
+                  )
+                })
+              }
+            </Card>  
+          )}
+        </ContainerFlex>
+        {
+          page < 8 && (
+          <ContainerFlex main row>
+            <ButtonSeemore onClick={this.handleSeeMore}>
+              See More Characters
+            </ButtonSeemore>
+          </ContainerFlex>
+          )
+        }
+      </Fragment>
     );
   }
 }
@@ -90,6 +150,20 @@ const mapStateToProps = store => ({
   people: store.people,
   startships: store.startships,
 });
+
+App.defaultProps = {
+  people: [],
+  startships: [],
+  fetchPeople: null,
+  fetchStarships: null,
+};
+
+App.propTypes = {
+  people: array,
+  startships: array,
+  fetchPeople: func,
+  fetchStarships: func,
+};
 
 
 export default connect(mapStateToProps,{
