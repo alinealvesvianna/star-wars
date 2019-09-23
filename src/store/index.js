@@ -1,3 +1,10 @@
-import { createStore } from 'redux';
-import { Reducers } from '../reducers';
-export const Store = createStore(Reducers);
+import { createStore, applyMiddleware } from "redux";
+import rootReducer from "../reducers";
+import apiMiddleware from "../middleware/api";
+
+const store = createStore(
+    rootReducer, 
+    applyMiddleware(apiMiddleware)
+    );
+window.store = store;
+export default store;

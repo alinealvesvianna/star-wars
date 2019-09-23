@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { clickButton } from './actions';
+import { fetchPeople, fetchStarships } from './actions'
 import './App.css';
 
 
 class App extends Component {
 
   state = {
-    inputValue: ''
+    inputValue: '',
+    page: 1,
+  }
+
+  componentDidMount(){
+    const { fetchPeople } = this.props;
+    const { page } = this.state;
+    fetchPeople(`people/?page=${page}`);
   }
 
   inputChange = event => {
@@ -16,10 +23,36 @@ class App extends Component {
     })
   }
 
+  handleSeeMore = () => {
+    const { page } = this.state;
+    if(page <= 8){
+      this.setState({
+        page: page + 1,
+      }, () => {
+        this.showMore();
+      })
+    }
+  }
+
+  showMore = () => {
+    const { page } = this.state;
+    const { fetchPeople } =  this.props;
+    fetchPeople(`people/?page=${page}`);
+  }
+
+  handleStarships = (starships, name) => {
+    const { fetchStarships } = this.props;
+    const starshipsQueryString = starships.map(item => {
+      const queryString = item.match(/starships.*/);
+      fetchStarships(queryString[0], name)
+    })
+ 
+  }
+
   render() {
     const {
-      clickButton,
-      newValue
+      people,
+      startships
     } = this.props;
 
     const { inputValue } = this.state;
@@ -27,24 +60,39 @@ class App extends Component {
 
     return (
       <div className="App" style={{ paddingTop: '10px' }}>
-        <input
-          onChange={this.inputChange}
-          type='text'
-          value={inputValue}
-        />
-        <button onClick={() => clickButton(inputValue)}>
-          Click me!
+      <p>{process.env.REACT_APP_BASE_URL}</p>
+        <button onClick={this.handleSeeMore}>
+          see more
         </button>
-        <h1>{newValue}</h1>
+        {people.map(item => 
+          <div>
+            {item.name}
+            {item.gender}
+            {item.starships && item.starships.length ? (
+              <button onClick={() => {this.handleStarships(item.starships, item.name)}}>clique aqui para ver as starships</button>
+            ) : null}
+
+            {startships && startships.map(starship => {
+              return starship.namePerson === item.name && (
+                <div>
+                  {starship.namePerson}
+                  {starship.manufacturer}
+                </div>
+              )
+            })}
+          </div>  
+        )}
       </div>
     );
   }
 }
 const mapStateToProps = store => ({
-  newValue: store.clickState.newValue
+  people: store.people,
+  startships: store.startships,
 });
 
 
 export default connect(mapStateToProps,{
-  clickButton
+  fetchPeople,
+  fetchStarships,
 })(App);
