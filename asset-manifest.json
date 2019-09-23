@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.1452f410.chunk.css",
+    "main.js": "/static/js/main.dc6fb5db.chunk.js",
+    "main.js.map": "/static/js/main.dc6fb5db.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.383248ff.js",
+    "runtime-main.js.map": "/static/js/runtime-main.383248ff.js.map",
+    "static/js/2.1cebd763.chunk.js": "/static/js/2.1cebd763.chunk.js",
+    "static/js/2.1cebd763.chunk.js.map": "/static/js/2.1cebd763.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.b4a2fbfd4d2b26ea1432861b60a76555.js": "/precache-manifest.b4a2fbfd4d2b26ea1432861b60a76555.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.1452f410.chunk.css.map": "/static/css/main.1452f410.chunk.css.map",
+    "static/media/Star_Wars_Logo.png": "/static/media/Star_Wars_Logo.8b6011e8.png"
+  }
+}
